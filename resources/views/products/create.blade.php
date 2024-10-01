@@ -1,58 +1,49 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Simple Laravel 11 CRUD</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  </head>
-  <body>
+@extends('layouts.app')
 
-    <div class="bg-dark py-3">
-        <h3 class="text-white text-center">Simple Laravel 11 CRUD</h3>
-    </div>
-    <div class="container">
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-10 d-flex justify-content-end">
-                <a href="{{ route('products.index') }}" class="btn btn-dark">Back</a>
-            </div>
-        </div>
-        <div class="row d-flex justify-content-center">
-            <div class="col-md-10">
-                <div class="card borde-0 shadow-lg my-4">
-                    <div class="card-header bg-dark">
-                        <h3 class="text-white">Create Product</h3>
+@section('content')
+
+<div class="container mx-auto mt-4">
+    <div class="flex justify-center">
+        <div class="w-full md:w-8/12 lg:w-6/12 xl:w-4/12">
+            <div class="bg-white shadow-lg rounded-md">
+                <div class="bg-gray-800 rounded-t-md px-4 py-3">
+                    <div class="flex justify-between items-center">
+                        <h3 class="text-white text-lg font-semibold">Create Product</h3>
+                        <a href="{{ route('products.index') }}" class="text-sm text-gray-300 hover:text-white">Back</a>
                     </div>
-                    <form enctype="multipart/form-data" action="{{ route('products.store') }}" method="post">
+                </div>
+
+                <div class="card-body px-4 py-3">
+                    <form action="{{ route('products.store') }}" method="post">
                         @csrf
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label for="" class="form-label h5">Nama</label>
-                                <input value="{{ old('name') }}" type="text" class="@error('name') is-invalid @enderror form-control-lg form-control" placeholder="Masukan Nama" name="name">
-                                @error('name')
-                                    <p class="invalid-feedback">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="" class="form-label h5">Harga</label>
-                                <input value="{{ old('price') }}" type="text" class="@error('price') is-invalid @enderror form-control form-control-lg" placeholder="Masukan Harga" name="price">
-                                @error('price')
-                                    <p class="invalid-feedback">{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label for="" class="form-label h5">Deskripsi</label>
-                                <textarea placeholder="Masukan Deskripsi" class="form-control" name="description" cols="30" rows="5">{{ old('description') }}</textarea>
-                            </div>
-                            <div class="d-grid">
-                                <button class="btn btn-lg btn-primary">Kirim</button>
-                            </div>
+                        <div class="mb-3">
+                            <label for="name" class="block text-gray-700 font-medium mb-2">Nama</label>
+                            <input value="{{ old('name') }}" type="text" class="border p-2 w-full rounded-md @error('name') border-red-500 @enderror" id="name" placeholder="Masukan Nama" name="name">
+                            @error('name')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="price" class="block text-gray-700 font-medium mb-2">Harga</label>
+                            <input value="{{ old('price') }}" type="text" class="border border-gray-400 p-2 w-full rounded-md @error('price') border-red-500 @enderror" id="price" placeholder="Masukan Harga" name="price">
+                            @error('price')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="block text-gray-700 font-medium mb-2">Deskripsi</label>
+                            <textarea placeholder="Masukan Deskripsi" class="border border-gray-400 p-2 w-full rounded-md" id="description" name="description" cols="30" rows="5">{{ old('description') }}</textarea>
+                            @error('description')
+                            <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        <div class="mt-4">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300">Simpan</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    
-  </body>
-</html>
+</div>
+@endsection

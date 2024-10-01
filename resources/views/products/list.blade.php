@@ -1,86 +1,70 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Simple Laravel 11 CRUD</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  </head>
-  <body>
-    <div class="bg-dark py-3">
-        <h3 class="text-white text-center">Simple Laravel 11 CRUD</h3>
+@extends('layouts.app')
+
+@section('content')
+<div class="container mx-auto mt-4 flex-row">
+    <div class="flex justify-end">
+        <a href="{{ route('products.create') }}" class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-600">Tambah</a>
     </div>
-    <div class="container">
-        <div class="row justify-content-center mt-4">
-            <div class="col-md-10 d-flex justify-content-end">
-                <a href="{{ route('products.create') }}" class="btn btn-dark">Create</a>
-            </div>
+    @if (Session::has('success'))
+    <div class="mt-4">
+        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ Session::get('success') }}</span>
         </div>
-        <div class="row d-flex justify-content-center">
-            @if (Session::has('success'))
-            <div class="col-md-10 mt-4">
-                <div class="alert alert-success">
-                    {{ Session::get('success') }}
+    </div>
+    @endif
+    <div class="flex justify-center">
+        <div class="w-full md:w-10/12 lg:w-8/12 xl:w-6/12">
+            <div class="bg-white shadow-lg rounded-md my-4">
+                <div class="bg-gray-800 rounded-t-md px-4 py-3">
+                    <h3 class="text-white text-lg font-semibold">Products</h3>
                 </div>
-            </div>    
-            @endif            
-            <div class="col-md-10">
-                <div class="card border-0 shadow-lg my-4">
-                    <div class="card-header bg-dark">
-                        <h3 class="text-white">Products</h3>
-                    </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <tr>
-                                <th>ID</th>
-                                <th></th>
-                                <th>Name</th>
-                                <th>Sku</th>
-                                <th>Price</th>
-                                <th>Created at</th>
-                                <th>Action</th>
+                <div class="card-body px-4 py-3">
+                    <table class="table-auto w-full">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="px-4 py-2">ID</th>
+                                <th class="px-4 py-2"></th>
+                                <th class="px-4 py-2">Name</th>
+                                <th class="px-4 py-2">Price</th>
+                                <th class="px-4 py-2">Action</th>
                             </tr>
+                        </thead>
+                        <tbody>
                             @if ($products->isNotEmpty())
                             @foreach ($products as $product)
                             <tr>
-                                <td>{{ $product->id }}</td>
-                                <td>
+                                <td class="border px-4 py-2">{{ $product->id }}</td>
+                                <td class="border px-4 py-2">
                                     @if ($product->image != "")
-                                        <img width="50" src="{{ asset('uploads/products/'.$product->image) }}" alt="">
+                                    <img width="50" src="{{ asset('uploads/products/'.$product->image) }}" alt="">
                                     @endif
                                 </td>
-                                <td>{{ $product->name }}</td>
-                                <td>{{ $product->sku }}</td>
-                                <td>${{ $product->price }}</td>
-                                <td>{{ \Carbon\Carbon::parse($product->created_at)->format('d M, Y') }}</td>
-                                <td>
-                                    <a href="{{ route('products.edit',$product->id) }}" class="btn btn-dark">Edit</a>
-                                    <!-- <a href="#" onclick="deleteProduct({{ $product->id }});" class="btn btn-danger">Delete</a> -->
-                                    <form id="delete-product-from-{{ $product->id  }}" action="{{ route('products.destroy',$product->id) }}" method="post">
+                                <td class="border px-4 py-2">{{ $product->name }}</td>
+                                <td class="border px-4 py-2">Rp.{{ $product->price }}</td>
+                                <td class="border px-4 py-2">
+                                    <a href="{{ route('products.edit',$product->id) }}" class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-600 text-xs">Edit</a>
+                                    <form id="delete-product-from-{{ $product->id }}" action="{{ route('products.destroy',$product->id) }}" method="post" class="inline-block">
                                         @csrf
                                         @method('delete')
+                                        <button type="button" onclick="deleteProduct({{ $product->id }});" class="bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded-md focus:outline-none focus:ring-2 focus:ring-red-300 text-xs">Delete</button>
                                     </form>
                                 </td>
-                            </tr>   
+                            </tr>
                             @endforeach
-                            
                             @endif
-                            
-                        </table>
-                    </div>
-                   
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
-    
-  </body>
-</html>
+</div>
 
 <script>
     function deleteProduct(id) {
         if (confirm("Are you sure you want to delete product?")) {
-            document.getElementById("delete-product-from-"+id).submit();
+            document.getElementById("delete-product-from-" + id).submit();
         }
     }
 </script>
+@endsection
